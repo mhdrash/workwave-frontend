@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 
 function SignIn({ setUser }) {
   const [formData, setFormData] = useState({
-    username: '',
+    cpr: '',
     password: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
@@ -37,12 +37,12 @@ function SignIn({ setUser }) {
       <h1>Sign In</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="cpr">Cpr:</label>
           <input
-            id="username"
-            name="username"
+            id="cpr"
+            name="cpr"
             type="text"
-            value={formData.username}
+            value={formData.cpr}
             onChange={handleChange}
             required
           />
