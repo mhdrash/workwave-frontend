@@ -6,8 +6,8 @@ import { BrowserRouter} from 'react-router'
 import axios from 'axios'
 import apiClient from './services/api'
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-apiClient.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = import.meta.env.REACT_APP_API_URL;
+apiClient.defaults.baseURL = import.meta.env.REACT_APP_API_URL;
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

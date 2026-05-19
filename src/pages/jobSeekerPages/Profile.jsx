@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import apiClient from "../../services/api";
+import axios from "axios";
 
 function Profile() {
   const [profile, setProfile] = useState(null);
@@ -24,7 +25,6 @@ function Profile() {
       <h1>{profile.name}'s Profile</h1>
       <p>Email: {profile.email}</p>
       <p>Phone: {profile.phone}</p>
-      {/* Add more profile fields as needed */}
     </div>
   );
 }
