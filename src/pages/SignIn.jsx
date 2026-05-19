@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 
-function SignIn({ setUser }) {
+function SignIn({ setUser, setEmployer }) {
   const [formData, setFormData] = useState({
     cpr: '',
     password: '',
@@ -23,10 +23,17 @@ function SignIn({ setUser }) {
       const token = response.data.token;
 
       const userInfo = JSON.parse(atob(token.split('.')[1])).payload;
-      setUser(userInfo);
+
+      if (userInfo.is_employer){
+        setEmployer(userInfo)
+        navigate('/dashboard');
+      } else {
+        setUser(userInfo);
+      }
+      
       localStorage.setItem('token', token);
 
-      navigate('/dashboard');
+      
     } catch (err) {
       setErrorMessage(err.response?.data?.err || 'An error occurred during sign in');
     }

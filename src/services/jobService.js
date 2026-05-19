@@ -1,8 +1,9 @@
-import apiClient from './api';
+import axios from "axios";
 
-export const getAllJobs = async (filters = {}) => {
+export const getAllJobs = async () => {
   try {
-    const response = await apiClient.get('/jobs', { params: filters });
+    
+    const response = await axios.get('/jobs');
     return response.data;
   } catch (error) {
     throw error.response?.data || error.message;
@@ -85,3 +86,4 @@ export const getJobsByLocation = async (location, filters = {}) => {
     throw error.response?.data || error.message;
   }
 };
+

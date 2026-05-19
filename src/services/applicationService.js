@@ -1,10 +1,8 @@
-import apiClient from './api';
-
-
-
+import axios
+ from "axios";
 export const submitApplication = async (jobId, applicationData) => {
   try {
-    const response = await apiClient.post(`/applications/job/${jobId}`, applicationData);
+    const response = await axios.post(`/applications/job/${jobId}`, applicationData);
     return response.data;
   } catch (error) {
     throw error.response?.data || error.message;
@@ -13,7 +11,7 @@ export const submitApplication = async (jobId, applicationData) => {
 
 export const getMyApplications = async (applicantId, filters = {}) => {
   try {
-    const response = await apiClient.get(`/applications/applicant/${applicantId}`, {
+    const response = await axios.get(`/applications/applicant/${applicantId}`, {
       params: filters,
     });
     return response.data;
@@ -25,7 +23,7 @@ export const getMyApplications = async (applicantId, filters = {}) => {
 
 export const getJobApplications = async (jobId, filters = {}) => {
   try {
-    const response = await apiClient.get(`/applications/job/${jobId}`, {
+    const response = await axios.get(`/applications/job/${jobId}`, {
       params: filters,
     });
     return response.data;
@@ -37,7 +35,7 @@ export const getJobApplications = async (jobId, filters = {}) => {
 
 export const getApplicationById = async (applicationId) => {
   try {
-    const response = await apiClient.get(`/applications/${applicationId}`);
+    const response = await axios.get(`/applications/${applicationId}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || error.message;

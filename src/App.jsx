@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [employer,setEmployer ] = useState(null);
 
   
   useEffect(() => {
@@ -29,7 +30,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/sign-up" element={!user ? <SignUp /> : <Navigate to='/dashboard'/>} />
-        <Route path="/sign-in" element={!user ? <SignIn setUser={setUser} /> : <Navigate to='/dashboard'/>} />
+        <Route path="/sign-in" element={!user ? <SignIn setUser={setUser} setEmployer={setEmployer} /> : <Navigate to='/dashboard'/>} />
         <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to='/sign-in'/>} />
 
       </Routes>
