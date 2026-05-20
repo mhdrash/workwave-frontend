@@ -44,7 +44,7 @@ function App() {
         <Route path="/my-applications" element={user ? <MyApplications user={user} /> : <Navigate to='/sign-in'/>} />
         <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to='/sign-in'/>} />
         <Route path="/job/:id" element={user ? <JobCard user={user} /> : <Navigate to='/sign-in'/>} />
-        <Route path="/company-form" element={<CompanyForm />} />
+        <Route path="/company-form" element={<CompanyForm user={user} />} />
         <Route path="/job-form" element={<JobForm />} />
         <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/job-list" element={<JobList />} />
