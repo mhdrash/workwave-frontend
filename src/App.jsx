@@ -1,10 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router';
-import Homepage from './pages/Homepage';
+import JobBank from './pages/JobBank';
 import SignUp from './pages/Signup';
 import SignIn from './pages/SignIn';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
+import CompanyForm from './pages/employerPages/CompanyForm';
+import JobForm from './pages/employerPages/JobForm';
+import JobDetails from './pages/employerPages/JobDetails';
+import JobList from './pages/employerPages/JobList';
+import MyApplications from './pages/jobSeekerPages/MyApplications';
+import Profile from './pages/jobSeekerPages/Profile';
+import JobCard from './pages/jobSeekerPages/JobCard';
+import './App.css';
+import axios from 'axios';
+import apiClient from './services/api';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -27,11 +37,19 @@ function App() {
     <div>
       <Navbar user={user} setUser={setUser} />
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route path="/" element={<JobBank />} />
         <Route path="/sign-up" element={!user ? <SignUp /> : <Navigate to='/dashboard'/>} />
         <Route path="/sign-in" element={!user ? <SignIn setUser={setUser} /> : <Navigate to='/dashboard'/>} />
         <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to='/sign-in'/>} />
+        <Route path="/my-applications" element={user ? <MyApplications user={user} /> : <Navigate to='/sign-in'/>} />
+        <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to='/sign-in'/>} />
+        <Route path="/job/:id" element={user ? <JobCard user={user} /> : <Navigate to='/sign-in'/>} />
+        <Route path="/company-form" element={<CompanyForm />} />
+        <Route path="/job-form" element={<JobForm />} />
+        <Route path="/job-details/:id" element={<JobDetails />} />
+        <Route path="/job-list" element={<JobList />} />
 
+   
       </Routes>
     </div>
   );

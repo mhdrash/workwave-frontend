@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Homepage() {
+function JobBank() {
   return (
     <div>
-      <h1>Welcome to our website</h1>
+      <h1>Job bank</h1>
     </div>
   )
 }
 
-export default Homepage
+export default JobBank
