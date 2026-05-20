@@ -54,4 +54,4 @@ function JobForm({user}) {
   )
 }
 
-export default JobForm
+export default JobForm;

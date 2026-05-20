@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL
+// Prefer Vite env var, fallback to REACT_APP env, then to localhost:3000 for local dev
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || import.meta.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 
 const apiClient = axios.create({
