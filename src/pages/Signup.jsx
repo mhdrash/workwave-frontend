@@ -19,6 +19,7 @@ function Signup() {
     event.preventDefault()
 
     try {
+      console.log(import.meta.env.VITE_BACKEND_URL);
       await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/sign-up`, formData);
       navigate('/sign-in');
     } catch (err) {
