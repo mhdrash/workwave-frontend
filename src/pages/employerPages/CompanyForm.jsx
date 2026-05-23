@@ -1,15 +1,30 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 function CompanyForm({ user ,setUser}) {
-  const [formData, setFormData] = useState({
+  const emptyCompanyForm = {
     name: "",
     cr: "",
     description: "",
     logo: "",
     crCert: "",
     website: "",
+  };
+
+  const companyToFormData = (company) => ({
+    name: company?.name || "",
+    cr: company?.cr || "",
+    description: company?.description || "",
+    logo: company?.logo || "",
+    crCert: company?.crCert || "",
+    website: company?.website || "",
   });
+
+  const [formData, setFormData] = useState(() =>
+    user?.company?._id ? companyToFormData(user.company) : emptyCompanyForm
+  );
+  const [isEditing, setIsEditing] = useState(!user?.company?._id);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -20,37 +35,67 @@ function CompanyForm({ user ,setUser}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     try {
+      const payload = { ...formData, employer: user._id };
+      const response = user?.company?._id
+        ? await axios.put(
+          `${import.meta.env.VITE_BACKEND_URL}/company/${user.company._id}`,
+          payload
+        )
+        : await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/company`,
+          payload
+        );
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/company`,
-        {...formData, employer: user._id}
-      );
+      const company =
+        response.data.company?.company || response.data.company || response.data;
 
-      console.log("Company created:", response.data);
-
-      // optional reset
-      setFormData({
-        name: "",
-        cr: "",
-        description: "",
-        logo: "",
-        crCert: "",
-        website: "",
-        employer: user._id,
-      });
-
-      setUser({ ...user, company: response.data.company.company });
+      setUser({ ...user, company });
+      setIsEditing(false);
       
     } catch (error) {
       console.error("Error creating company:", error);
+      setError(error.response?.data?.err || "Error saving company details.");
     }
   };
 
+  const handleEditDetails = () => {
+    setFormData(companyToFormData(user.company));
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setFormData(companyToFormData(user.company));
+    setIsEditing(false);
+    setError("");
+  };
+
+  if (user?.company?._id && !isEditing) {
+    return (
+      <div>
+        <h1>Company Details</h1>
+
+        <p>Name: {user.company.name}</p>
+        <p>CR Number: {user.company.cr}</p>
+        <p>Description: {user.company.description}</p>
+        {user.company.logo && <p>Logo: {user.company.logo}</p>}
+        <p>CR Certificate: {user.company.crCert}</p>
+        {user.company.website && <p>Website: {user.company.website}</p>}
+
+        <button type="button" onClick={handleEditDetails}>
+          Edit Details
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <h1>Create Company</h1>
+      <h1>{user?.company?._id ? "Edit Company Details" : "Create Company"}</h1>
+
+      {error && <p>{error}</p>}
 
       <form onSubmit={handleSubmit}>
         <div>
@@ -134,7 +179,15 @@ function CompanyForm({ user ,setUser}) {
 
         <br />
 
-        <button type="submit">Create Company</button>
+        <button type="submit">
+          {user?.company?._id ? "Save Details" : "Create Company"}
+        </button>
+
+        {user?.company?._id && (
+          <button type="button" onClick={handleCancelEdit}>
+            Cancel
+          </button>
+        )}
       </form>
     </div>
   );

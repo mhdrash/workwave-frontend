@@ -12,6 +12,8 @@ function JobForm({user}) {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const companyDetails = user?.company;
+
 
   function handleChange(e) {
     setJobData({
@@ -25,7 +27,7 @@ function JobForm({user}) {
     e.preventDefault();
     setError('');
 
-    if (!user?.company?._id) {
+    if (!companyDetails?._id) {
       setError('Please create a company before posting a job.');
       return;
     }
@@ -34,7 +36,17 @@ function JobForm({user}) {
       title: jobData.title,
       location: jobData.location,
       description: jobData.description,
-      company: user.company._id,
+      company: companyDetails._id,
+      companyDetails: {
+        _id: companyDetails._id,
+        name: companyDetails.name,
+        cr: companyDetails.cr,
+        description: companyDetails.description,
+        logo: companyDetails.logo,
+        crCert: companyDetails.crCert,
+        website: companyDetails.website,
+        employer: companyDetails.employer || user._id,
+      },
     };
 
     try {
@@ -45,7 +57,7 @@ function JobForm({user}) {
         location: '',
         description: '',
       });
-      navigate('/');
+      navigate('/job-card');
     } catch (err) {
       setError(err?.message || 'Error creating job.');
     } finally {
@@ -58,6 +70,14 @@ function JobForm({user}) {
       <h1>Post a Job</h1>
 
       {error && <p>{error}</p>}
+
+      {companyDetails && (
+        <section>
+          <h2>{companyDetails.name}</h2>
+          <p>{companyDetails.description}</p>
+          {companyDetails.website && <p>{companyDetails.website}</p>}
+        </section>
+      )}
 
       <form onSubmit={handleSubmit}>
         <div>
