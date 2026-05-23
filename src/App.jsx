@@ -58,8 +58,8 @@ const token = localStorage.getItem('token');
       <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route path="/" element={<JobBank />} />
-        <Route path="/sign-up" element={!user ? <SignUp /> : <Navigate to='/dashboard'/>} />
-        <Route path="/sign-in" element={!user ? <SignIn setUser={setUser} /> : <Navigate to='/dashboard'/>} />
+        <Route path="/sign-up" element={!user ? <SignUp /> : <Navigate to='/'/>} />
+        <Route path="/sign-in" element={!user ? <SignIn setUser={setUser} /> : <Navigate to='/'/>} />
         <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to='/sign-in'/>} />
         <Route path="/my-applications" element={user ? <MyApplications user={user} /> : <Navigate to='/sign-in'/>} />
         <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to='/sign-in'/>} />
