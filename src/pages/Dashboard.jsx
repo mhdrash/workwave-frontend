@@ -20,7 +20,7 @@ async function fetchProfile() {
 
   return (
     <div>
-        <h1>Welcome {user.username}</h1>
+        <h1>Welcome {user.cpr}</h1>
         <h2>Profile:</h2>
         {profile && (
             <div>
