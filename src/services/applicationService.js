@@ -56,14 +56,8 @@ export const submitApplication = async (jobId, applicationData) => {
 export const getMyApplications = async (applicantId, filters = {}) => {
   try {
     const response = await requestWithFallback([
-      () => apiClient.get(`/applications/applicant/${applicantId}`, {
-        params: filters,
-      }),
       () => apiClient.get('/applications', {
         params: { ...filters, applicantId },
-      }),
-      () => apiClient.get(`/application/applicant/${applicantId}`, {
-        params: filters,
       }),
       () => apiClient.get('/application', {
         params: { ...filters, applicantId },
