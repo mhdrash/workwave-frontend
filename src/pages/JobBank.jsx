@@ -119,6 +119,7 @@ function JobBank({ user }) {
           {jobs.map((job) => (
             <div key={job._id || job.id}>
               <JobCard job={job} />
+              <div className="actions">
               {isEmployer && getJobCompanyId(job) === user?.company?._id && (
                 <>
                   <button
@@ -150,6 +151,7 @@ function JobBank({ user }) {
                   </button>
                 </>
               )}
+              </div>
             </div>
           ))}
         </div>

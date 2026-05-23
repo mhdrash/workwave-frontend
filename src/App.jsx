@@ -19,6 +19,7 @@ import axios from 'axios';
 function App() {
   const [user, setUser] = useState(null);
   const isEmployer = user?.is_employer;
+  const canPostJob = isEmployer && Boolean(user?.company?._id);
 
   
   async function getCompany(id){
@@ -58,7 +59,7 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className="app-shell" data-theme={isEmployer ? 'workwave-dark' : 'workwave-light'}>
       <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route path="/" element={<JobBank user={user} />} />
@@ -71,8 +72,8 @@ function App() {
         <Route path="/job-card" element={isEmployer ? <JobCard user={user} /> : <Navigate to='/'/>} />
         <Route path="/job/:id" element={user ? <JobCard user={user} /> : <Navigate to='/sign-in'/>} />
         <Route path="/company-form" element={isEmployer ? <CompanyForm user = {user} setUser = {setUser}/> : <Navigate to='/'/>} />
-        <Route path="/job-form" element={isEmployer ? <JobForm user={user} /> : <Navigate to='/'/>} />
-        <Route path="/job-form/:jobId" element={isEmployer ? <JobForm user={user} /> : <Navigate to='/'/>} />
+        <Route path="/job-form" element={canPostJob ? <JobForm user={user} /> : <Navigate to='/company-form'/>} />
+        <Route path="/job-form/:jobId" element={canPostJob ? <JobForm user={user} /> : <Navigate to='/company-form'/>} />
         <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/job-list" element={<JobList />} />
 

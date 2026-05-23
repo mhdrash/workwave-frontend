@@ -125,7 +125,7 @@ function Profile({ user }) {
   };
 
   if (!formData) {
-    return <div>Loading...</div>;
+    return <main><p>Loading...</p></main>;
   }
 
   const profileCpr = user?.cpr || profileDetails?.cpr || formData.cpr;
@@ -133,7 +133,7 @@ function Profile({ user }) {
 
   if (profileDetails && hasProfileDetails(profileDetails) && !isEditing) {
     return (
-      <div>
+      <main>
         <h1>{profileName}'s Profile</h1>
 
         <section>
@@ -167,12 +167,12 @@ function Profile({ user }) {
         <button type="button" onClick={handleEditDetails}>
           Edit Details
         </button>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div>
+    <main>
       <h1>{profileName}'s Profile</h1>
 
       {error && <p>{error}</p>}
@@ -373,7 +373,7 @@ function Profile({ user }) {
           </button>
         )}
       </form>
-    </div>
+    </main>
   );
 }
 

@@ -38,7 +38,11 @@ function CompanyForm({ user ,setUser}) {
     setError("");
 
     try {
-      const payload = { ...formData, employer: user._id };
+      const payload = {
+        ...formData,
+        cr: Number(formData.cr),
+        employer: user._id,
+      };
       const response = user?.company?._id
         ? await axios.put(
           `${import.meta.env.VITE_BACKEND_URL}/company/${user.company._id}`,
@@ -74,25 +78,27 @@ function CompanyForm({ user ,setUser}) {
 
   if (user?.company?._id && !isEditing) {
     return (
-      <div>
+      <main>
         <h1>Company Details</h1>
 
-        <p>Name: {user.company.name}</p>
-        <p>CR Number: {user.company.cr}</p>
-        <p>Description: {user.company.description}</p>
-        {user.company.logo && <p>Logo: {user.company.logo}</p>}
-        <p>CR Certificate: {user.company.crCert}</p>
-        {user.company.website && <p>Website: {user.company.website}</p>}
+        <section>
+          <p>Name: {user.company.name}</p>
+          <p>CR Number: {user.company.cr}</p>
+          <p>Description: {user.company.description}</p>
+          {user.company.logo && <p>Logo: {user.company.logo}</p>}
+          <p>CR Certificate: {user.company.crCert}</p>
+          {user.company.website && <p>Website: {user.company.website}</p>}
+        </section>
 
         <button type="button" onClick={handleEditDetails}>
           Edit Details
         </button>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div>
+    <main>
       <h1>{user?.company?._id ? "Edit Company Details" : "Create Company"}</h1>
 
       {error && <p>{error}</p>}
@@ -160,7 +166,6 @@ function CompanyForm({ user ,setUser}) {
             type="text"
             value={formData.crCert}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -189,7 +194,7 @@ function CompanyForm({ user ,setUser}) {
           </button>
         )}
       </form>
-    </div>
+    </main>
   );
 }
 

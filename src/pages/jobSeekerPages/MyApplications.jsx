@@ -143,39 +143,43 @@ function MyApplications({ user }) {
   };
 
   return (
-    <div>
+    <main>
       <h1>My Applications</h1>
       {error && <p>{error}</p>}
       {applications.length === 0 ? (
         <p>You have not applied to any jobs yet.</p>
       ) : (
-        applications.map((app) => (
-          <div
-            key={getApplicationId(app) || `${getApplicantId(app)}-${getApplicationJobId(app)}`}
-            className="application-card"
-          >
-            <h2>{getJobTitle(app)}</h2>
-            {getApplicationName(app) && <p>Name: {getApplicationName(app)}</p>}
-            <p>Applicant: {getApplicantId(app)}</p>
-            <p>Job ID: {getApplicationJobId(app)}</p>
-            {getCompanyName(app) && <p>Company: {getCompanyName(app)}</p>}
-            <p>Status: {app.status || "Submitted"}</p>
-            <button
-              type="button"
-              onClick={() => handleWithdraw(getApplicationId(app))}
+        <div className="job-card-list">
+          {applications.map((app) => (
+            <div
+              key={getApplicationId(app) || `${getApplicantId(app)}-${getApplicationJobId(app)}`}
+              className="application-card"
             >
-              Withdraw
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSeeDetails(getApplicationJobId(app))}
-            >
-              See Details
-            </button>
-          </div>
-        ))
+              <h2>{getJobTitle(app)}</h2>
+              {getApplicationName(app) && <p>Name: {getApplicationName(app)}</p>}
+              <p>Applicant: {getApplicantId(app)}</p>
+              <p>Job ID: {getApplicationJobId(app)}</p>
+              {getCompanyName(app) && <p>Company: {getCompanyName(app)}</p>}
+              <p>Status: {app.status || "Submitted"}</p>
+              <div className="actions">
+                <button
+                  type="button"
+                  onClick={() => handleWithdraw(getApplicationId(app))}
+                >
+                  Withdraw
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSeeDetails(getApplicationJobId(app))}
+                >
+                  See Details
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
-    </div>
+    </main>
   );
 }   
 

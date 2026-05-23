@@ -16,7 +16,7 @@ function Dashboard({ user }) {
   }, [user._id]);
 
   return (
-    <div>
+    <main>
         <h1>Welcome {user.cpr}</h1>
         <h2>Profile:</h2>
         {profileDetails ? (
@@ -27,7 +27,7 @@ function Dashboard({ user }) {
         ) : (
             <p>You have not created a profile yet.</p>
         )}
-    </div>
+    </main>
   )
 }
 
