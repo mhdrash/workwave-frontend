@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getAllJobs } from "../../services/jobService";
+import { useNavigate } from "react-router";
+import { deleteJob, getAllJobs } from "../../services/jobService";
 
 function getJobsArray(data) {
   return Array.isArray(data) ? data : data.jobs || data.jobCards || [];
@@ -21,9 +22,12 @@ function JobCardItem({ job }) {
 
   return (
     <div className="job-card">
+      <section>
+        <h2>{companyName || "Company"}</h2>
+        {companyDetails?.description && <p>{companyDetails.description}</p>}
+        {companyDetails?.website && <p>{companyDetails.website}</p>}
+      </section>
       <h2>{job.title}</h2>
-      {companyName && <p>{companyName}</p>}
-      {companyDetails?.website && <p>{companyDetails.website}</p>}
       {job.location && <p>{job.location}</p>}
       <p>{job.description}</p>
     </div>
@@ -31,6 +35,7 @@ function JobCardItem({ job }) {
 }
 
 function JobCard({ job, user }) {
+  const navigate = useNavigate();
   const [companyJobs, setCompanyJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(!job);
   const [error, setError] = useState("");
@@ -62,6 +67,17 @@ function JobCard({ job, user }) {
     return <JobCardItem job={job} />;
   }
 
+  const handleDelete = async (jobId) => {
+    try {
+      await deleteJob(jobId);
+      setCompanyJobs((currentJobs) =>
+        currentJobs.filter((companyJob) => (companyJob._id || companyJob.id) !== jobId)
+      );
+    } catch (err) {
+      setError(err?.message || "Unable to delete job.");
+    }
+  };
+
   return (
     <main>
       <h1>Company Posted Jobs</h1>
@@ -80,7 +96,23 @@ function JobCard({ job, user }) {
       {!isLoading && !error && companyJobs.length > 0 && (
         <div className="job-card-list">
           {companyJobs.map((companyJob) => (
-            <JobCardItem key={companyJob._id || companyJob.id} job={companyJob} />
+            <div key={companyJob._id || companyJob.id}>
+              <JobCardItem job={companyJob} />
+              <div className="actions">
+                <button
+                  type="button"
+                  onClick={() => navigate(`/job-form/${companyJob._id || companyJob.id}`)}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(companyJob._id || companyJob.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           ))}
         </div>
       )}
