@@ -123,12 +123,14 @@ function JobBank({ user }) {
               {isEmployer && getJobCompanyId(job) === user?.company?._id && (
                 <>
                   <button
+                    className="job-bank-button"
                     type="button"
                     onClick={() => navigate(`/job-form/${job._id || job.id}`)}
                   >
                     Edit Job
                   </button>
                   <button
+                    className="job-bank-button"
                     type="button"
                     onClick={() => handleDelete(job._id || job.id)}
                   >
@@ -139,11 +141,16 @@ function JobBank({ user }) {
               {!isEmployer && (
                 <>
                   {!appliedJobIds.includes(job._id || job.id) && (
-                    <button type="button" onClick={() => handleApply(job._id || job.id)}>
+                    <button
+                      className="job-bank-button"
+                      type="button"
+                      onClick={() => handleApply(job._id || job.id)}
+                    >
                       Apply
                     </button>
                   )}
                   <button
+                    className="job-bank-button"
                     type="button"
                     onClick={() => navigate(`/job-details/${job._id || job.id}`)}
                   >

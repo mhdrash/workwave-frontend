@@ -111,11 +111,11 @@ input[type="radio"] {
 }
 
 button {
-  @apply m-1 inline-flex min-h-9 items-center justify-center rounded-field bg-primary px-4 py-2 text-sm font-semibold text-primary-content shadow-sm transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60;
+  @apply m-1 inline-flex min-h-9 items-center justify-center rounded-field border border-primary bg-primary px-4 py-2 text-sm font-semibold text-primary-content shadow-sm transition hover:bg-base-100 hover:text-primary disabled:cursor-not-allowed disabled:opacity-60;
 }
 
 button[type="button"] {
-  @apply border border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-content;
+  @apply border-primary bg-primary text-primary-content hover:bg-base-100 hover:text-primary;
 }
 
 .app-shell {
@@ -173,4 +173,8 @@ main > section,
 
 .actions {
   @apply mt-3 flex flex-wrap gap-2;
+}
+
+.job-bank-button {
+  @apply border border-primary bg-primary text-primary-content hover:bg-base-100 hover:text-primary hover:brightness-100;
 }
