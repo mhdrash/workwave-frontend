@@ -1,11 +1,13 @@
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 function Navbar({ user, setUser }) {
+  const navigate = useNavigate()
 
 
   function logOut() {
     localStorage.removeItem('token')
     setUser(null)
+    navigate('/')
   }
 
   return (
@@ -21,7 +23,7 @@ function Navbar({ user, setUser }) {
           <Link className='nav-item' to='/my-applications'>My Applications</Link>
           <Link className='nav-item' to='/profile'>Profile</Link>
           <Link className='nav-item' to='/job-card'>Job Card</Link>
-          <Link className='nav-item' to='/job-list'>Job List</Link>
+          {/* <Link className='nav-item' to='/job-list'>Job List</Link> */}
           <Link className='nav-item' to='/company-form'>Company Form</Link>
           <Link className='nav-item' to='/job-form'>Job Form</Link>
           {/* <Link className='nav-item' to='/job-details'>Job Details</Link> */}

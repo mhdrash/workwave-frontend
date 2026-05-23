@@ -6,13 +6,19 @@ function Signup() {
   const [formData, setFormData] = useState({
     cpr: '',
     password: '',
+    is_employer: false,
   });
   const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
 
   const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
+    const value =
+      event.target.name === 'is_employer'
+        ? event.target.value === 'true'
+        : event.target.value;
+
+    setFormData({ ...formData, [event.target.name]: value });
   };
 
   async function handleSubmit(event){
@@ -31,6 +37,32 @@ function Signup() {
     <div>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
+        <div>
+          <p>Sign up as:</p>
+          <label htmlFor="jobseeker">
+            <input
+              id="jobseeker"
+              name="is_employer"
+              type="radio"
+              value="false"
+              checked={!formData.is_employer}
+              onChange={handleChange}
+            />
+            Job Seeker
+          </label>
+          <label htmlFor="employer">
+            <input
+              id="employer"
+              name="is_employer"
+              type="radio"
+              value="true"
+              checked={formData.is_employer}
+              onChange={handleChange}
+            />
+            Employer
+          </label>
+        </div>
+
         <div>
           <label htmlFor="cpr">Cpr:</label>
           <input
@@ -55,6 +87,10 @@ function Signup() {
         </div>
         <button type="submit">Sign Up</button>
       </form>
+      <p>Already have an account?</p>
+      <button type="button" onClick={() => navigate('/sign-in')}>
+        Sign In
+      </button>
       {errorMessage && <p style={{ color: 'red' }} role="alert">{errorMessage}</p>}
     </div>
   );

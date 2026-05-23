@@ -28,7 +28,7 @@ function JobBank({ user }) {
 
   const handleApply = (jobId) => {
     if (!user) {
-      navigate('/sign-in');
+      navigate('/sign-up');
       return;
     }
 
