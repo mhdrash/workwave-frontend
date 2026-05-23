@@ -20,17 +20,37 @@ function App() {
   const [user, setUser] = useState(null);
 
   
-  useEffect(() => {
-    const token = localStorage.getItem('token');
+  async function getCompany(id){
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/company/employer/${id}`);
+      console.log("Company data:", response.data);
+      return response.data.company;
+
+    }
+    catch (error) {
+      console.error("Error fetching company data:", error);
+    }
+  }
+
+  async function fetchProfile() {
+const token = localStorage.getItem('token');
     if (token) {
       try {
         const userInfo = JSON.parse(atob(token.split('.')[1])).payload;
+                const company = await getCompany(userInfo._id);
+
+        userInfo.company = company;
         setUser(userInfo);
+
       } catch (err) {
         console.error('Invalid token:', err);
         localStorage.removeItem('token');
       }
     }
+  }
+
+  useEffect(() => {
+    fetchProfile();
   }, []);
 
   return (
@@ -44,8 +64,8 @@ function App() {
         <Route path="/my-applications" element={user ? <MyApplications user={user} /> : <Navigate to='/sign-in'/>} />
         <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to='/sign-in'/>} />
         <Route path="/job/:id" element={user ? <JobCard user={user} /> : <Navigate to='/sign-in'/>} />
-        <Route path="/company-form" element={<CompanyForm />} />
-        <Route path="/job-form" element={<JobForm />} />
+        <Route path="/company-form" element={<CompanyForm user = {user} setUser = {setUser}/>} />
+        <Route path="/job-form" element={<JobForm user={user} />} />
         <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/job-list" element={<JobList />} />
 

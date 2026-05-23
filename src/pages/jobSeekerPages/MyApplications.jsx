@@ -7,9 +7,12 @@ function MyApplications() {
   const [applications, setApplications] = useState([]);
 
   useEffect(() => {
-    apiClient.get("/user/applications")
+
+    // apiClient.get("/user/applications")
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/applications`)
       .then((response) => {
-        setApplications(response.data);
+        console.log("Applications fetched:", response);
+        setApplications(response.data.applications);
       })
       .catch((error) => {
         console.error("Error fetching applications:", error);
