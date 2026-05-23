@@ -1,8 +1,16 @@
-import axios from 'axios';
-import {useState, useEffect, use} from 'react'
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { createJob } from '../../services/jobService';
 
 function JobForm({user}) {
-  const [jobData, setJobData] = useState(null);
+  const navigate = useNavigate();
+  const [jobData, setJobData] = useState({
+    title: '',
+    location: '',
+    description: '',
+  });
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   function handleChange(e) {
@@ -15,42 +23,91 @@ function JobForm({user}) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setError('');
+
+    if (!user?.company?._id) {
+      setError('Please create a company before posting a job.');
+      return;
+    }
+
     const payload = {
       title: jobData.title,
+      location: jobData.location,
       description: jobData.description,
-      company: user.company._id
+      company: user.company._id,
     };
-    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/job-cards`, jobData)
-      .then((response) => {
-        console.log("Job created:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error creating job:", error);
+
+    try {
+      setIsSubmitting(true);
+      await createJob(payload);
+      setJobData({
+        title: '',
+        location: '',
+        description: '',
       });
+      navigate('/');
+    } catch (err) {
+      setError(err?.message || 'Error creating job.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
   
   return (
-    <div>
-      <h1>Job Form</h1>
+    <main>
+      <h1>Post a Job</h1>
 
-      <form action="" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Job Title"
-          value={jobData?.title || ''}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="description"
-          placeholder="Job Description"
-          value={jobData?.description || ''}
-          onChange={handleChange}
-        />
-        <button type="submit">Create Job</button>
+      {error && <p>{error}</p>}
+
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="title">Job Title:</label>
+          <input
+            id="title"
+            type="text"
+            name="title"
+            placeholder="Job Title"
+            value={jobData.title}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <br />
+
+        <div>
+          <label htmlFor="location">Location:</label>
+          <input
+            id="location"
+            type="text"
+            name="location"
+            placeholder="Location"
+            value={jobData.location}
+            onChange={handleChange}
+          />
+        </div>
+
+        <br />
+
+        <div>
+          <label htmlFor="description">Job Description:</label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Job Description"
+            value={jobData.description}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <br />
+
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Posting...' : 'Create Job'}
+        </button>
       </form>
-    </div>
+    </main>
   )
 }
 

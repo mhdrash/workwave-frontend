@@ -1,9 +1,1 @@
-import React from 'react'
-
-function JobForm() {
-  return (
-    <div>JobForm</div>
-  )
-}
-
-export default JobForm
+export { default } from './employerPages/JobForm';

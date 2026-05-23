@@ -1,14 +1,16 @@
-import React from "react";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import apiClient from "../../services/api";
-
 function JobCard({ job }) {
+  if (!job) {
+    return null;
+  }
+
+  const companyName =
+    typeof job.company === "object" ? job.company?.name : job.company;
+
   return (
     <div className="job-card">
       <h2>{job.title}</h2>
-      <p>{job.company}</p>
-      <p>{job.location}</p>
+      {companyName && <p>{companyName}</p>}
+      {job.location && <p>{job.location}</p>}
       <p>{job.description}</p>
     </div>
   );
