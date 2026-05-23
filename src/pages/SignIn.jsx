@@ -26,7 +26,7 @@ function SignIn({ setUser }) {
       setUser(userInfo);
       localStorage.setItem('token', token);
 
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
       setErrorMessage(err.response?.data?.err || 'An error occurred during sign in');
     }
