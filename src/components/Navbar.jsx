@@ -24,7 +24,7 @@ function Navbar({ user, setUser }) {
           <Link className='nav-item' to='/job-list'>Job List</Link>
           <Link className='nav-item' to='/company-form'>Company Form</Link>
           <Link className='nav-item' to='/job-form'>Job Form</Link>
-          <Link className='nav-item' to='/job-details'>Job Details</Link>
+          {/* <Link className='nav-item' to='/job-details'>Job Details</Link> */}
 
 
           <span className='nav-item'>{user.username}</span>
