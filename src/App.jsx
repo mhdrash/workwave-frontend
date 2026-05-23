@@ -22,6 +22,11 @@ function App() {
   const canPostJob = isEmployer && Boolean(user?.company?._id);
 
   
+  async function setUserWithCompany(userInfo) {
+    const company = await getCompany(userInfo._id);
+    setUser({ ...userInfo, company });
+  }
+
   async function getCompany(id){
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/company/employer/${id}`);
@@ -46,8 +51,7 @@ function App() {
 
       getCompany(userInfo._id)
         .then((company) => {
-          userInfo.company = company;
-          setUser(userInfo);
+          setUser({ ...userInfo, company });
         })
         .catch((err) => {
           console.error('Error fetching company:', err);
@@ -64,7 +68,7 @@ function App() {
       <Routes>
         <Route path="/" element={<JobBank user={user} />} />
         <Route path="/sign-up" element={!user ? <SignUp /> : <Navigate to='/'/>} />
-        <Route path="/sign-in" element={!user ? <SignIn setUser={setUser} /> : <Navigate to='/'/>} />
+        <Route path="/sign-in" element={!user ? <SignIn setUser={setUserWithCompany} /> : <Navigate to='/'/>} />
         <Route path="/dashboard" element={isEmployer ? <Dashboard user={user} /> : <Navigate to='/'/>} />
         <Route path="/my-applications" element={user && !isEmployer ? <MyApplications user={user} /> : <Navigate to='/'/>} />
         <Route path="/application-review/:jobId" element={user ? <ApplicationReview user={user} /> : <Navigate to='/sign-in'/>} />

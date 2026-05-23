@@ -35,7 +35,7 @@ function Navbar({ user, setUser }) {
 
               {isEmployer && (
                 <>
-                  <Link className='nav-item' to='/dashboard'>Dashboard</Link>
+                  {/* <Link className='nav-item' to='/dashboard'>Dashboard</Link> */}
                   <Link className='nav-item' to='/job-card'>Job Card</Link>
                   {/* <Link className='nav-item' to='/job-list'>Job List</Link> */}
                   <Link className='nav-item' to='/company-form'>Company</Link>
