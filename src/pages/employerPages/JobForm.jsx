@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { createJob } from '../../services/jobService';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { createJob, getJobById, updateJob } from '../../services/jobService';
 
 function JobForm({user}) {
   const navigate = useNavigate();
+  const { jobId } = useParams();
+  const isEditing = Boolean(jobId);
   const [jobData, setJobData] = useState({
     title: '',
     location: '',
@@ -13,6 +15,26 @@ function JobForm({user}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const companyDetails = user?.company;
+
+  useEffect(() => {
+    if (!jobId) {
+      return;
+    }
+
+    getJobById(jobId)
+      .then((data) => {
+        const job = data.jobCard || data.job || data;
+
+        setJobData({
+          title: job.title || '',
+          location: job.location || '',
+          description: job.description || '',
+        });
+      })
+      .catch((err) => {
+        setError(err?.message || 'Error loading job.');
+      });
+  }, [jobId]);
 
 
   function handleChange(e) {
@@ -51,7 +73,11 @@ function JobForm({user}) {
 
     try {
       setIsSubmitting(true);
-      await createJob(payload);
+      if (isEditing) {
+        await updateJob(jobId, payload);
+      } else {
+        await createJob(payload);
+      }
       setJobData({
         title: '',
         location: '',
@@ -67,7 +93,7 @@ function JobForm({user}) {
   
   return (
     <main>
-      <h1>Post a Job</h1>
+      <h1>{isEditing ? 'Edit Job' : 'Post a Job'}</h1>
 
       {error && <p>{error}</p>}
 
@@ -124,8 +150,15 @@ function JobForm({user}) {
         <br />
 
         <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Posting...' : 'Create Job'}
+          {isSubmitting
+            ? isEditing ? 'Saving...' : 'Posting...'
+            : isEditing ? 'Save Job' : 'Create Job'}
         </button>
+        {isEditing && (
+          <button type="button" onClick={() => navigate('/')}>
+            Cancel Changes
+          </button>
+        )}
       </form>
     </main>
   )

@@ -18,6 +18,7 @@ import axios from 'axios';
 
 function App() {
   const [user, setUser] = useState(null);
+  const isEmployer = user?.is_employer;
 
   
   async function getCompany(id){
@@ -63,15 +64,16 @@ function App() {
         <Route path="/" element={<JobBank user={user} />} />
         <Route path="/sign-up" element={!user ? <SignUp /> : <Navigate to='/'/>} />
         <Route path="/sign-in" element={!user ? <SignIn setUser={setUser} /> : <Navigate to='/'/>} />
-        <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to='/sign-in'/>} />
-        <Route path="/my-applications" element={user ? <MyApplications user={user} /> : <Navigate to='/sign-in'/>} />
+        <Route path="/dashboard" element={isEmployer ? <Dashboard user={user} /> : <Navigate to='/'/>} />
+        <Route path="/my-applications" element={user && !isEmployer ? <MyApplications user={user} /> : <Navigate to='/'/>} />
         <Route path="/application-review/:jobId" element={user ? <ApplicationReview user={user} /> : <Navigate to='/sign-in'/>} />
-        <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to='/sign-in'/>} />
-        <Route path="/job-card" element={user ? <JobCard user={user} /> : <Navigate to='/sign-in'/>} />
+        <Route path="/profile" element={user && !isEmployer ? <Profile user={user} /> : <Navigate to='/'/>} />
+        <Route path="/job-card" element={isEmployer ? <JobCard user={user} /> : <Navigate to='/'/>} />
         <Route path="/job/:id" element={user ? <JobCard user={user} /> : <Navigate to='/sign-in'/>} />
-        <Route path="/company-form" element={<CompanyForm user = {user} setUser = {setUser}/>} />
-        <Route path="/job-form" element={<JobForm user={user} />} />
-        {/* <Route path="/job-details/:id" element={<JobDetails />} /> */}
+        <Route path="/company-form" element={isEmployer ? <CompanyForm user = {user} setUser = {setUser}/> : <Navigate to='/'/>} />
+        <Route path="/job-form" element={isEmployer ? <JobForm user={user} /> : <Navigate to='/'/>} />
+        <Route path="/job-form/:jobId" element={isEmployer ? <JobForm user={user} /> : <Navigate to='/'/>} />
+        <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/job-list" element={<JobList />} />
 
    

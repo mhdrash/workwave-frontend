@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router'
 
 function Navbar({ user, setUser }) {
   const navigate = useNavigate()
+  const isEmployer = user?.is_employer
 
 
   function logOut() {
@@ -18,14 +19,23 @@ function Navbar({ user, setUser }) {
       {user ? (
         // Links for protected routes only for logged in users
         <>
-          <Link className='nav-item' to='/dashboard'>Dashboard</Link>
+          {!isEmployer && (
+            <>
+              <Link className='nav-item' to='/my-applications'>My Applications</Link>
+              <Link className='nav-item' to='/profile'>Profile</Link>
+            </>
+          )}
 
-          <Link className='nav-item' to='/my-applications'>My Applications</Link>
-          <Link className='nav-item' to='/profile'>Profile</Link>
-          <Link className='nav-item' to='/job-card'>Job Card</Link>
-          {/* <Link className='nav-item' to='/job-list'>Job List</Link> */}
-          <Link className='nav-item' to='/company-form'>Company Form</Link>
-          <Link className='nav-item' to='/job-form'>Job Form</Link>
+          {isEmployer && (
+            <>
+              <Link className='nav-item' to='/dashboard'>Dashboard</Link>
+              <Link className='nav-item' to='/job-card'>Job Card</Link>
+              {/* <Link className='nav-item' to='/job-list'>Job List</Link> */}
+              <Link className='nav-item' to='/company-form'>Company Form</Link>
+              <Link className='nav-item' to='/job-form'>Job Form</Link>
+            </>
+          )}
+
           {/* <Link className='nav-item' to='/job-details'>Job Details</Link> */}
 
 
