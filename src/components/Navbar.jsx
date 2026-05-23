@@ -11,7 +11,7 @@ function Navbar({ user, setUser }) {
   return (
     <div>
       {/* Routes seen by everyone */}
-      <Link className='nav-item' to='/job-bank'>Job Bank</Link>
+      <Link className='nav-item' to='/'>Job Bank</Link>
 
       {user ? (
         // Links for protected routes only for logged in users
