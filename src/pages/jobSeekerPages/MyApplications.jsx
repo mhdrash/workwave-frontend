@@ -4,6 +4,7 @@ import {
   deleteApplication,
   getMyApplications,
 } from "../../services/applicationService";
+import { getJobById } from "../../services/jobService";
 
 function getApplicationsArray(data) {
   if (Array.isArray(data)) {
@@ -22,10 +23,6 @@ function getApplicationsArray(data) {
 }
 
 function getJobTitle(application) {
-  if (typeof application.job === "string") {
-    return `Job: ${application.job}`;
-  }
-
   return (
     application.job?.title ||
     application.job?.jobTitle ||
@@ -96,11 +93,30 @@ function MyApplications({ user }) {
             return !applicantId || applicantId === user._id;
           }
         );
+        const applicationsWithJobs = await Promise.all(
+          fetchedApplications.map(async (application) => {
+            const jobId = getApplicationJobId(application);
+
+            if (typeof application.job === "object" || !jobId) {
+              return application;
+            }
+
+            try {
+              const jobData = await getJobById(jobId);
+              return {
+                ...application,
+                job: jobData.jobCard || jobData.job || jobData,
+              };
+            } catch {
+              return application;
+            }
+          })
+        );
 
         setApplications((currentApplications) => {
           const combinedApplications = [
             ...currentApplications,
-            ...fetchedApplications,
+            ...applicationsWithJobs,
           ];
 
           return combinedApplications.filter(
