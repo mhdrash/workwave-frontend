@@ -34,11 +34,11 @@ function Signup() {
   };
 
   return (
-    <div>
+    <main>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <p>Sign up as:</p>
+          <p>Sign up as</p>
           <label htmlFor="jobseeker">
             <input
               id="jobseeker"
@@ -64,7 +64,7 @@ function Signup() {
         </div>
 
         <div>
-          <label htmlFor="cpr">Cpr:</label>
+          <label htmlFor="cpr">CPR</label>
           <input
             id="cpr"
             name="cpr"
@@ -75,7 +75,7 @@ function Signup() {
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password">Password</label>
           <input
             id="password"
             name="password"
@@ -92,7 +92,7 @@ function Signup() {
         Sign In
       </button>
       {errorMessage && <p style={{ color: 'red' }} role="alert">{errorMessage}</p>}
-    </div>
+    </main>
   );
 }
 

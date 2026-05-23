@@ -74,7 +74,7 @@ function App() {
         <Route path="/company-form" element={isEmployer ? <CompanyForm user = {user} setUser = {setUser}/> : <Navigate to='/'/>} />
         <Route path="/job-form" element={canPostJob ? <JobForm user={user} /> : <Navigate to='/company-form'/>} />
         <Route path="/job-form/:jobId" element={canPostJob ? <JobForm user={user} /> : <Navigate to='/company-form'/>} />
-        <Route path="/job-details/:id" element={<JobDetails />} />
+        <Route path="/job-details/:id" element={<JobDetails user={user} />} />
         <Route path="/job-list" element={<JobList />} />
 
    

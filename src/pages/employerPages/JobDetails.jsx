@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { getJobById } from '../../services/jobService';
 
-function JobDetails() {
+function JobDetails({ user }) {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [error, setError] = useState('');
 
@@ -27,13 +28,33 @@ function JobDetails() {
 
   const companyName =
     typeof job.company === 'object' ? job.company?.name : job.company;
+  const handleApply = () => {
+    if (!user) {
+      navigate('/sign-up');
+      return;
+    }
+
+    navigate(`/application-review/${id}`);
+  };
 
   return (
     <main>
       <h1>{job.title}</h1>
-      {companyName && <p>Company: {companyName}</p>}
-      {job.location && <p>Location: {job.location}</p>}
-      {job.description && <p>{job.description}</p>}
+      <section>
+        {companyName && <p>Company: {companyName}</p>}
+        {job.location && <p>Location: {job.location}</p>}
+        {job.description && <p>{job.description}</p>}
+      </section>
+      <div className="actions">
+        {!user?.is_employer && (
+          <button type="button" onClick={handleApply}>
+            Apply
+          </button>
+        )}
+        <button type="button" onClick={() => navigate('/')}>
+          Back
+        </button>
+      </div>
     </main>
   )
 }

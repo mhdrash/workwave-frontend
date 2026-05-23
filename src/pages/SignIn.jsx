@@ -33,11 +33,11 @@ function SignIn({ setUser }) {
   };
 
   return (
-    <div>
+    <main>
       <h1>Sign In</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="cpr">Cpr:</label>
+          <label htmlFor="cpr">CPR</label>
           <input
             id="cpr"
             name="cpr"
@@ -48,7 +48,7 @@ function SignIn({ setUser }) {
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password">Password</label>
           <input
             id="password"
             name="password"
@@ -61,7 +61,7 @@ function SignIn({ setUser }) {
         <button type="submit">Sign In</button>
       </form>
       {errorMessage && <p style={{ color: 'red' }} role="alert">{errorMessage}</p>}
-    </div>
+    </main>
   );
 }
 
