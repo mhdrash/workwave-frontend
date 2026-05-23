@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router";
-import { getMyApplications } from "../../services/applicationService";
+import { useLocation, useNavigate } from "react-router";
+import {
+  deleteApplication,
+  getMyApplications,
+} from "../../services/applicationService";
 
 function getApplicationsArray(data) {
   if (Array.isArray(data)) {
@@ -61,8 +64,21 @@ function getApplicationName(application) {
   return application.profile?.name || application.name;
 }
 
+function getApplicationId(application) {
+  return application._id || application.id;
+}
+
+function getApplicationJobId(application) {
+  if (typeof application.job === "object") {
+    return application.job?._id || application.job?.id;
+  }
+
+  return application.job || application.jobId;
+}
+
 function MyApplications({ user }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const submittedApplication = location.state?.application;
   const [applications, setApplications] = useState(
     submittedApplication ? [submittedApplication] : []
@@ -108,6 +124,24 @@ function MyApplications({ user }) {
     fetchApplications();
   }, [user._id]);
 
+  const handleWithdraw = async (applicationId) => {
+    try {
+      setError("");
+      await deleteApplication(applicationId);
+      setApplications((currentApplications) =>
+        currentApplications.filter(
+          (application) => getApplicationId(application) !== applicationId
+        )
+      );
+    } catch (err) {
+      setError(err?.message || "Unable to withdraw application.");
+    }
+  };
+
+  const handleSeeDetails = (jobId) => {
+    navigate(`/job-details/${jobId}`);
+  };
+
   return (
     <div>
       <h1>My Applications</h1>
@@ -117,15 +151,27 @@ function MyApplications({ user }) {
       ) : (
         applications.map((app) => (
           <div
-            key={app._id || app.id || `${getApplicantId(app)}-${app.job?._id || app.job}`}
+            key={getApplicationId(app) || `${getApplicantId(app)}-${getApplicationJobId(app)}`}
             className="application-card"
           >
             <h2>{getJobTitle(app)}</h2>
             {getApplicationName(app) && <p>Name: {getApplicationName(app)}</p>}
             <p>Applicant: {getApplicantId(app)}</p>
-            <p>Job ID: {app.job?._id || app.job}</p>
+            <p>Job ID: {getApplicationJobId(app)}</p>
             {getCompanyName(app) && <p>Company: {getCompanyName(app)}</p>}
             <p>Status: {app.status || "Submitted"}</p>
+            <button
+              type="button"
+              onClick={() => handleWithdraw(getApplicationId(app))}
+            >
+              Withdraw
+            </button>
+            <button
+              type="button"
+              onClick={() => handleSeeDetails(getApplicationJobId(app))}
+            >
+              See Details
+            </button>
           </div>
         ))
       )}

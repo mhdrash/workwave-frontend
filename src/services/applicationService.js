@@ -91,3 +91,12 @@ export const getApplicationById = async (applicationId) => {
     throw error.response?.data || error.message;
   }
 };
+
+export const deleteApplication = async (applicationId) => {
+  try {
+    const response = await apiClient.delete(`/applications/${applicationId}`);
+    return response.data;
+  } catch (error) {
+    throw getRequestError(error);
+  }
+};

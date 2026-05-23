@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import JobCard from './jobSeekerPages/JobCard';
 import { deleteJob, getAllJobs } from '../services/jobService';
+import { getMyApplications } from '../services/applicationService';
 
 function getJobCompanyId(job) {
   if (typeof job.company === 'object') {
@@ -11,10 +12,35 @@ function getJobCompanyId(job) {
   return job.companyDetails?._id || job.company;
 }
 
+function getApplicationsArray(data) {
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  if (Array.isArray(data.applications)) {
+    return data.applications;
+  }
+
+  if (data.application) {
+    return Array.isArray(data.application) ? data.application : [data.application];
+  }
+
+  return data._id || data.id ? [data] : [];
+}
+
+function getApplicationJobId(application) {
+  if (typeof application.job === 'object') {
+    return application.job?._id || application.job?.id;
+  }
+
+  return application.job || application.jobId;
+}
+
 function JobBank({ user }) {
   const navigate = useNavigate();
   const isEmployer = user?.is_employer;
   const [jobs, setJobs] = useState([]);
+  const [appliedJobIds, setAppliedJobIds] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -34,6 +60,28 @@ function JobBank({ user }) {
 
     fetchJobs();
   }, []);
+
+  useEffect(() => {
+    async function fetchApplications() {
+      if (!user || isEmployer) {
+        setAppliedJobIds([]);
+        return;
+      }
+
+      try {
+        const data = await getMyApplications(user._id);
+        const jobIds = getApplicationsArray(data)
+          .map(getApplicationJobId)
+          .filter(Boolean);
+
+        setAppliedJobIds(jobIds);
+      } catch (err) {
+        setError(err?.message || 'Unable to load applications.');
+      }
+    }
+
+    fetchApplications();
+  }, [user, isEmployer]);
 
   const handleApply = (jobId) => {
     if (!user) {
@@ -89,9 +137,11 @@ function JobBank({ user }) {
               )}
               {!isEmployer && (
                 <>
-                  <button type="button" onClick={() => handleApply(job._id || job.id)}>
-                    Apply
-                  </button>
+                  {!appliedJobIds.includes(job._id || job.id) && (
+                    <button type="button" onClick={() => handleApply(job._id || job.id)}>
+                      Apply
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() => navigate(`/job-details/${job._id || job.id}`)}
